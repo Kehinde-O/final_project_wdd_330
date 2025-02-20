@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - Movie Night Planner</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body id="search-results-page">
+    <header>
+        <div class="container">
+            <nav>
+                <h1><a href="index.html">Movie Night Planner</a></h1>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="search-results.html?type=movie" class="active">Movies</a></li>
+                    <li><a href="search-results.html?type=restaurant">Restaurants</a></li>
+                    <li><a href="plan.html">My Plan</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <section id="search-section" class="search-bar-container">
+                <input type="text" class="search-bar" id="search-query-input" placeholder="Search movies or restaurants...">
+                <button id="search-button">Search</button>
+            </section>
+
+            <section id="results-section">
+                <h2 class="section-title">Search Results</h2>
+                <div class="carousel results-carousel" id="search-results-carousel">
+                    <!-- Search results will be loaded here by JS -->
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>© 2025 Movie Night Planner. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="./js/script.js" type="module"></script>
+</body>
+</html>

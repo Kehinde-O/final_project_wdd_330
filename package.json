@@ -1,0 +1,14 @@
+{
+  "name": "movie-night-planner",
+  "version": "1.0.0",
+  "description": "Movie Night Planner Web Application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
