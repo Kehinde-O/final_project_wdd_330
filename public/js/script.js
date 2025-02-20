@@ -15,6 +15,60 @@ document.addEventListener('DOMContentLoaded', async () => {
         const planSummaryContainer = document.getElementById('plan-summary');
         const combinedSearchInput = document.getElementById('movie-search'); // Using movie-search input for combined search
 
+
+        // Add these lines to properly connect the hero buttons
+        const exploreMoviesBtn = document.querySelector('.hero-button.primary');
+        const findRestaurantsBtn = document.querySelector('.hero-button.secondary');
+
+        // Event listener for Explore Movies button
+        if (exploreMoviesBtn) {
+            exploreMoviesBtn.addEventListener('click', () => {
+                window.location.href = 'search-results.html?type=movie&trending=true';
+            });
+        }
+
+        // Event listener for Find Restaurants button
+        if (findRestaurantsBtn) {
+            findRestaurantsBtn.addEventListener('click', () => {
+                window.location.href = 'search-results.html?type=restaurant&popular=true';
+            });
+        }
+
+        // Enhanced search functionality
+        if (combinedSearchInput) {
+            // Add input event listener to show/hide search button based on input
+            const searchButton = document.getElementById('combined-search-button');
+            searchButton.style.display = 'inline-block'; // Make the search button visible
+
+            combinedSearchInput.addEventListener('input', (event) => {
+                const query = event.target.value.trim();
+                searchButton.style.opacity = query ? '1' : '0.5';
+            });
+
+            // Search on Enter key
+            combinedSearchInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    const query = combinedSearchInput.value.trim();
+                    if (query) {
+                        performCombinedSearch(query);
+                    } else {
+                        alert('Please enter a movie or restaurant name to search.');
+                    }
+                }
+            });
+
+            // Search button click event
+            searchButton.addEventListener('click', () => {
+                const query = combinedSearchInput.value.trim();
+                if (query) {
+                    performCombinedSearch(query);
+                } else {
+                    alert('Please enter a movie or restaurant name to search.');
+                }
+            });
+        }
+
+
         // Load trending movies on homepage carousel
         if (trendingMovieCarousel) {
             const trendingMovies = await tmdbApi.getTrendingMovies();
@@ -101,8 +155,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             });
         }
-         // Search Input Enter Key Listener
-         if (searchQueryInput) {
+        // Search Input Enter Key Listener
+        if (searchQueryInput) {
             searchQueryInput.addEventListener('keydown', (event) => {
                 if (event.key === 'Enter') {
                     const query = searchQueryInput.value.trim();
@@ -146,8 +200,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-     // --- Plan Page (plan.html) ---
-     if (document.body.id === 'plan-page') {
+    // --- Plan Page (plan.html) ---
+    if (document.body.id === 'plan-page') {
         const planContent = document.getElementById('plan-content');
         const planData = getPlan();
         displayPlanDetails(planData, planContent);
