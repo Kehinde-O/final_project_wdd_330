@@ -132,36 +132,62 @@ document.addEventListener('DOMContentLoaded', async () => {
         const type = urlParams.get('type');
         const query = urlParams.get('query');
 
-        // Initial search if query parameter is present
-        if (query && type === 'movie') {
-            performMovieSearch(query, searchResultsCarousel);
-        } else if (query && type === 'restaurant') {
-            performRestaurantSearch(query, searchResultsCarousel);
-        } else if (type === 'movie' && urlParams.get('trending')) {
-            loadTrendingMoviesForCarousel(searchResultsCarousel); // Load trending if 'trending' param is present
-        } else if (type === 'restaurant' && urlParams.get('popular')) {
-            loadPopularRestaurantsForCarousel(searchResultsCarousel); // Load popular restaurants if 'popular' param
+        // Initialize search input with current query if exists
+        if (query && searchQueryInput) {
+            searchQueryInput.value = query;
         }
 
+        // Initial search or load trending
+        async function initializeSearchResults() {
+            if (!searchResultsCarousel) return;
+
+            if (type === 'movie') {
+                if (query) {
+                    // If there's a search query, perform the search
+                    await performMovieSearch(query, searchResultsCarousel);
+                } else {
+                    // If no query but type is movie, show trending movies
+                    await loadTrendingMoviesForCarousel(searchResultsCarousel);
+                }
+            } else if (type === 'restaurant') {
+                if (query) {
+                    await performRestaurantSearch(query, searchResultsCarousel);
+                } else {
+                    await loadPopularRestaurantsForCarousel(searchResultsCarousel);
+                }
+            }
+        }
+
+        // Initialize the page
+        initializeSearchResults();
 
         // Search Button Event Listener
         if (searchButton && searchQueryInput) {
-            searchButton.addEventListener('click', () => {
+            searchButton.addEventListener('click', async () => {
                 const query = searchQueryInput.value.trim();
                 if (query) {
-                    performCombinedSearch(query); // Perform search based on input
+                    if (type === 'movie') {
+                        await performMovieSearch(query, searchResultsCarousel);
+                    } else if (type === 'restaurant') {
+                        await performRestaurantSearch(query, searchResultsCarousel);
+                    }
                 } else {
                     alert('Please enter a search query.');
                 }
             });
         }
+
         // Search Input Enter Key Listener
         if (searchQueryInput) {
-            searchQueryInput.addEventListener('keydown', (event) => {
+            searchQueryInput.addEventListener('keydown', async (event) => {
                 if (event.key === 'Enter') {
                     const query = searchQueryInput.value.trim();
                     if (query) {
-                        performCombinedSearch(query);
+                        if (type === 'movie') {
+                            await performMovieSearch(query, searchResultsCarousel);
+                        } else if (type === 'restaurant') {
+                            await performRestaurantSearch(query, searchResultsCarousel);
+                        }
                     } else {
                         alert('Please enter a search query.');
                     }
