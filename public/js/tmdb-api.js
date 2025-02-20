@@ -30,7 +30,15 @@ export async function getMovieRecommendations() {
 
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500'; // You can adjust image size as needed
 
+// export function getMovieImageUrl(posterPath) {
+//     if (!posterPath) return './assets/placeholder-image.png'; // Placeholder if no poster
+//     return `${TMDB_IMAGE_BASE_URL}${posterPath}`;
+// }
+
 export function getMovieImageUrl(posterPath) {
-    if (!posterPath) return './assets/placeholder-image.png'; // Placeholder if no poster
+    // If posterPath is undefined or null, return a default image
+    if (!posterPath) {
+        return './assets/movie-placeholder.png'; // Make sure this placeholder image exists in your assets folder
+    }
     return `${TMDB_IMAGE_BASE_URL}${posterPath}`;
 }
