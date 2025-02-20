@@ -142,63 +142,108 @@ export function displayPlanSummary(plan, container) {
 }
 
 export function displayPlanDetails(plan, container) {
-    clearElementChildren(container);
-    if (!plan.movie && !plan.restaurant) {
-        container.innerHTML = '<p>Your plan is empty. Go back to home and add movie and restaurant!</p>';
-        return;
-    }
+    if (!container) return;
 
-    let planHTML = '';
-    if (plan.movie) {
-        planHTML += `
-            <section class="plan-item">
-                <h3>Movie: ${plan.movie.title}</h3>
-                <img src="${getMovieImageUrl(plan.movie.poster_path)}" alt="${plan.movie.title}" class="detail-image">
-                <div class="detail-info">
-                    <p><strong>Overview:</strong> ${plan.movie.overview}</p>
-                    <p><strong>Rating:</strong> ${plan.movie.vote_average}</p>
-                    <p><strong>Genres:</strong> ${plan.movie.genres.map(genre => genre.name).join(', ')}</p>
+    try {
+        if (!plan?.movie?.item) {
+            container.innerHTML = `
+                <div class="empty-plan">
+                    <h3>No Movie Night Plan Yet</h3>
+                    <p>Start planning your movie night by finding a movie you'd like to watch!</p>
+                    <a href="search-results.html?type=movie" class="primary-button">Find a Movie</a>
                 </div>
-            </section>
+            `;
+            return;
+        }
+
+        const movie = plan.movie.item;
+        const planDate = plan.movie.date ? new Date(plan.movie.date) : null;
+
+        container.innerHTML = `
+            <div class="plan-details-card">
+                <div class="plan-section movie-section">
+                    <div class="movie-info">
+                        <img src="${movie.poster_path ? 'https://image.tmdb.org/t/p/w500' + movie.poster_path : './assets/movie-placeholder.png'}"
+                             alt="${movie.title}"
+                             class="movie-poster"
+                             onerror="this.src='./assets/movie-placeholder.png'">
+                        <div class="movie-details">
+                            <h3>${movie.title}</h3>
+                            <p class="movie-rating">Rating: ${movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}/10</p>
+                            <p class="movie-overview">${movie.overview || 'No overview available'}</p>
+                            ${movie.release_date ? `<p class="movie-release">Release Date: ${new Date(movie.release_date).toLocaleDateString()}</p>` : ''}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="plan-section event-details">
+                    <h3>Event Details</h3>
+                    ${planDate ? `
+                        <p class="event-date">
+                            <span class="icon">📅</span> 
+                            ${planDate.toLocaleDateString('en-US', {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })}
+                        </p>
+                        <p class="event-time">
+                            <span class="icon">⏰</span> 
+                            ${planDate.toLocaleTimeString('en-US', {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            })}
+                        </p>
+                    ` : '<p>No date set</p>'}
+                    
+                    <p class="attendees">
+                        <span class="icon">👥</span> 
+                        ${plan.movie.numberOfPeople || 1} ${plan.movie.numberOfPeople === 1 ? 'person' : 'people'} attending
+                    </p>
+
+                    ${plan.movie.snacks?.length ? `
+                        <div class="snacks-section">
+                            <h4>Snacks</h4>
+                            <div class="chips-container">
+                                ${plan.movie.snacks.map(snack => `
+                                    <span class="chip">${snack}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    ${plan.movie.drinks?.length ? `
+                        <div class="drinks-section">
+                            <h4>Drinks</h4>
+                            <div class="chips-container">
+                                ${plan.movie.drinks.map(drink => `
+                                    <span class="chip">${drink}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+
+                <div class="plan-actions">
+                    <button onclick="window.location.href='search-results.html?type=movie'" class="secondary-button">Find Another Movie</button>
+                    <button onclick="clearPlan()" class="danger-button">Cancel Plan</button>
+                </div>
+            </div>
+        `;
+
+    } catch (error) {
+        console.error('Error displaying plan details:', error);
+        container.innerHTML = `
+            <div class="error-message">
+                <h3>Oops! Something went wrong</h3>
+                <p>There was an error displaying your plan. Please try creating a new plan.</p>
+                <button onclick="clearPlan()" class="secondary-button">Clear Plan</button>
+                <a href="search-results.html?type=movie" class="primary-button">Find a Movie</a>
+            </div>
         `;
     }
-    if (plan.restaurant) {
-        planHTML += `
-            <section class="plan-item">
-                <h3>Restaurant: ${plan.restaurant.name}</h3>
-                <img src="${getRestaurantImageUrl(plan.restaurant.image_url)}" alt="${plan.restaurant.name}" class="detail-image">
-                <div class="detail-info">
-                    <p><strong>Rating:</strong> ${plan.restaurant.rating} / 5</p>
-                    <p><strong>Price:</strong> ${plan.restaurant.price || 'Not available'}</p>
-                    <p><strong>Categories:</strong> ${plan.restaurant.categories.map(cat => cat.title).join(', ')}</p>
-                    <p><strong>Address:</strong> ${plan.restaurant.location.display_address.join(', ')}</p>
-                    <p><strong>Phone:</strong> ${plan.restaurant.display_phone}</p>
-                    <p><a href="${plan.restaurant.url}" target="_blank">View on Yelp</a></p>
-                </div>
-            </section>
-        `;
-    }
-
-    planHTML += `
-        <div class="detail-actions">
-            <button id="share-plan-button">Share Plan</button>
-        </div>
-    `;
-
-    container.innerHTML = planHTML;
-
-    document.getElementById('share-plan-button').addEventListener('click', () => {
-        const planData = getPlan();
-        const planString = `Movie Night Plan:\nMovie: ${planData.movie?.title || 'Not Selected'}\nRestaurant: ${planData.restaurant?.name || 'Not Selected'}`;
-        navigator.clipboard.writeText(planString).then(() => {
-            alert('Plan copied to clipboard!');
-        }).catch(err => {
-            console.error('Failed to copy plan: ', err);
-            alert('Failed to copy plan to clipboard.');
-        });
-    });
 }
-
 
 // Placeholder functions - Implement local storage logic in script.js
 export function addToPlan(type, item) {

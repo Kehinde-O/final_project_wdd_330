@@ -768,6 +768,181 @@ label.chip{
     color:#222 !important;
 }
 
+/* Plan Details Page Styles */
+.plan-details-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    margin: 2rem auto;
+    max-width: 800px;
+    overflow: hidden;
+}
+
+.plan-section {
+    padding: 2rem;
+    border-bottom: 1px solid #eee;
+}
+
+.movie-info {
+    display: flex;
+    gap: 2rem;
+    align-items: start;
+}
+
+.movie-poster {
+    width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.movie-details {
+    flex: 1;
+}
+
+.movie-details h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.movie-rating {
+    color: #f39c12;
+    font-weight: 600;
+    margin: 0.5rem 0;
+}
+
+.movie-overview {
+    color: #666;
+    line-height: 1.6;
+    margin: 1rem 0;
+}
+
+.event-details {
+    background: #f8f9fa;
+}
+
+.event-details h3 {
+    margin: 0 0 1.5rem;
+    color: #333;
+}
+
+.event-date, .event-time, .attendees {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.75rem 0;
+    color: #555;
+}
+
+.icon {
+    font-size: 1.2rem;
+}
+
+.snacks-section, .drinks-section {
+    margin-top: 1.5rem;
+}
+
+.snacks-section h4, .drinks-section h4 {
+    margin: 0 0 0.75rem;
+    color: #333;
+}
+
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.chip {
+    background: #e9ecef;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    color: #495057;
+}
+
+.plan-actions {
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.empty-plan {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    margin: 2rem auto;
+    max-width: 600px;
+}
+
+.empty-plan h3 {
+    margin: 0 0 1rem;
+    color: #333;
+}
+
+.empty-plan p {
+    color: #666;
+    margin: 0 0 1.5rem;
+}
+
+.error-message {
+    text-align: center;
+    padding: 2rem;
+    background: #fff3f3;
+    border-radius: 12px;
+    margin: 2rem auto;
+    max-width: 600px;
+}
+
+.error-message h3 {
+    color: #dc3545;
+    margin: 0 0 1rem;
+}
+
+.error-message p {
+    color: #666;
+    margin: 0 0 1.5rem;
+}
+
+.primary-button, .secondary-button, .danger-button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.primary-button {
+    background: #007bff;
+    color: white;
+}
+
+.secondary-button {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.danger-button {
+    background: #dc3545;
+    color: white;
+}
+
+.primary-button:hover {
+    background: #0056b3;
+}
+
+.secondary-button:hover {
+    background: #dde2e6;
+}
+
+.danger-button:hover {
+    background: #c82333;
+}
+
 @keyframes dots {
     0%, 20% { content: '.'; }
     40% { content: '..'; }
